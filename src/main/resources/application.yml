@@ -1,4 +1,7 @@
 spring:
+  config:
+    import:
+      - optional:configserver:http://localhost:8888
   application:
     name: operation-service
   data:
@@ -8,6 +11,11 @@ spring:
       port: 27020
 server:
   port: 8083
+management:
+  endpoint:
+    web:
+      exposure:
+        include: "*"
 message:
   path-operation: /api/v1/operations
   path-operationType: /api/v1/operationTypes

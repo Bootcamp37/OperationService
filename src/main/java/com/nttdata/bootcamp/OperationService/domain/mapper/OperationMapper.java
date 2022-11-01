@@ -3,6 +3,7 @@ package com.nttdata.bootcamp.OperationService.domain.mapper;
 import com.nttdata.bootcamp.OperationService.domain.dto.OperationRequest;
 import com.nttdata.bootcamp.OperationService.domain.dto.OperationResponse;
 import com.nttdata.bootcamp.OperationService.domain.entity.Operation;
+import com.nttdata.bootcamp.OperationService.infraestructure.IOperationMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

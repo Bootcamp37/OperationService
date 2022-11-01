@@ -4,7 +4,7 @@ import com.nttdata.bootcamp.OperationService.domain.dto.CustomerPassiveProductRe
 import com.nttdata.bootcamp.OperationService.domain.dto.OperationRequest;
 import com.nttdata.bootcamp.OperationService.domain.dto.OperationResponse;
 import com.nttdata.bootcamp.OperationService.domain.entity.OperationType;
-import com.nttdata.bootcamp.OperationService.domain.mapper.IOperationMapper;
+import com.nttdata.bootcamp.OperationService.infraestructure.IOperationMapper;
 import com.nttdata.bootcamp.OperationService.infraestructure.IOperationRepository;
 import com.nttdata.bootcamp.OperationService.infraestructure.IOperationService;
 import lombok.RequiredArgsConstructor;

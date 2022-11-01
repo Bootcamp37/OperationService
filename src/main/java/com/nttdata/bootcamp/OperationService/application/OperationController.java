@@ -5,6 +5,7 @@ import com.nttdata.bootcamp.OperationService.domain.dto.OperationResponse;
 import com.nttdata.bootcamp.OperationService.infraestructure.IOperationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${message.path-operation}")
+@RefreshScope
 public class OperationController {
     @Autowired
     private IOperationService service;

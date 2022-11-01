@@ -1,4 +1,4 @@
-package com.nttdata.bootcamp.OperationService.domain.mapper;
+package com.nttdata.bootcamp.OperationService.infraestructure;
 
 import com.nttdata.bootcamp.OperationService.domain.dto.OperationRequest;
 import com.nttdata.bootcamp.OperationService.domain.dto.OperationResponse;
