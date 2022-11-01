@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: operation-service
+  data:
+    mongodb:
+      database: db_operation
+      host: localhost
+      port: 27020
+server:
+  port: 8083
+message:
+  path-operation: /api/v1/operations
+  path-operationType: /api/v1/operationTypes
