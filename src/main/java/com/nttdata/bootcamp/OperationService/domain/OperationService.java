@@ -43,30 +43,30 @@ public class OperationService implements IOperationService {
     }
 
     @Override
-    public Mono<OperationResponse> save(OperationRequest request) {
+    public Mono<OperationResponse> save(Mono<OperationRequest> request) {
         // Existe la cuenta?
-        return customerProductRepository.getById(request.getCustomerPassiveProductId())
+        return request.flatMap(e -> customerProductRepository.getById(e.getCustomerPassiveProductId())
                 .flatMap(customerPassiveProductResponse -> {
                     // Coloca la fecha
-                    request.setOperationDate(getDate());
+                    e.setOperationDate(getDate());
                     // Es retiro y no tiene saldo?
-                    if (request.getOperationType().equals(OperationType.WITHDRAWAL) && customerPassiveProductResponse.getAmount() < request.getAmount()) {
+                    if (e.getOperationType().equals(OperationType.WITHDRAWAL) && customerPassiveProductResponse.getAmount() < e.getAmount()) {
                         // Retorna error
                         return Mono.error(RuntimeException::new);
                     }
 
                     CustomerPassiveProductRequest update = new CustomerPassiveProductRequest();
                     BeanUtils.copyProperties(customerPassiveProductResponse, update);
-                    if (request.getOperationType().equals(OperationType.WITHDRAWAL)) {
-                        update.setAmount(customerPassiveProductResponse.getAmount() - request.getAmount());
+                    if (e.getOperationType().equals(OperationType.WITHDRAWAL)) {
+                        update.setAmount(customerPassiveProductResponse.getAmount() - e.getAmount());
                     }
-                    if (request.getOperationType().equals(OperationType.DEPOSIT)) {
-                        update.setAmount(customerPassiveProductResponse.getAmount() + request.getAmount());
+                    if (e.getOperationType().equals(OperationType.DEPOSIT)) {
+                        update.setAmount(customerPassiveProductResponse.getAmount() + e.getAmount());
                     }
                     // Actualizar saldo
-                    return customerProductRepository.update(update, request.getCustomerPassiveProductId())
+                    return customerProductRepository.update(update, e.getCustomerPassiveProductId())
                             // Guardar operacion
-                            .flatMap(p -> Mono.just(request))
+                            .flatMap(p -> Mono.just(e))
                             .map(mapper::toEntity)
                             .flatMap(repository::save)
                             .map(mapper::toResponse)
@@ -74,11 +74,11 @@ public class OperationService implements IOperationService {
                 })
                 // No Existe
                 // Mandar error
-                .switchIfEmpty(Mono.error(RuntimeException::new));
+                .switchIfEmpty(Mono.error(RuntimeException::new)));
     }
 
     @Override
-    public Mono<OperationResponse> update(OperationRequest request, String id) {
+    public Mono<OperationResponse> update(Mono<OperationRequest> request, String id) {
         return Mono.just(new OperationResponse());
     }
 

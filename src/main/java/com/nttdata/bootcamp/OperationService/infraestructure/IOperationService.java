@@ -10,9 +10,9 @@ public interface IOperationService {
 
     Mono<OperationResponse> getById(String id);
 
-    Mono<OperationResponse> save(OperationRequest request);
+    Mono<OperationResponse> save(Mono<OperationRequest> request);
 
-    Mono<OperationResponse> update(OperationRequest request, String id);
+    Mono<OperationResponse> update(Mono<OperationRequest> request, String id);
 
     Mono<OperationResponse> delete(String id);
 }
