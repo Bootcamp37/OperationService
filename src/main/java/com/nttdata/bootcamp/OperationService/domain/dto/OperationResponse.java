@@ -14,4 +14,5 @@ public class OperationResponse {
     private OperationType operationType;
     private Double amount;
     private String operationDate;
+    private Double commission = 0.0;
 }

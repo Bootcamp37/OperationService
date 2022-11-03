@@ -31,12 +31,14 @@ public class OperationService implements IOperationService {
 
     @Override
     public Flux<OperationResponse> getAll() {
+        log.debug("====> OperationService: getAll");
         return repository.findAll()
                 .map(mapper::toResponse);
     }
 
     @Override
     public Mono<OperationResponse> getById(String id) {
+        log.debug("====> OperationService: getAll");
         return repository.findById(id)
                 .map(mapper::toResponse)
                 .switchIfEmpty(Mono.error(RuntimeException::new));
@@ -44,8 +46,10 @@ public class OperationService implements IOperationService {
 
     @Override
     public Mono<OperationResponse> save(Mono<OperationRequest> request) {
+        log.debug("====> OperationService: Save");
         // Existe la cuenta?
-        return request.flatMap(e -> customerProductRepository.getById(e.getCustomerPassiveProductId())
+        return request.map(this::printDebug)
+                .flatMap(e -> customerProductRepository.getById(e.getCustomerPassiveProductId())
                 .flatMap(customerPassiveProductResponse -> {
                     // Coloca la fecha
                     e.setOperationDate(getDate());
@@ -54,19 +58,19 @@ public class OperationService implements IOperationService {
                         // Retorna error
                         return Mono.error(RuntimeException::new);
                     }
-
                     CustomerPassiveProductRequest update = new CustomerPassiveProductRequest();
                     BeanUtils.copyProperties(customerPassiveProductResponse, update);
+                    // Contar el numero de transacciones en el mes
+                    Integer numTranx = 0; // GetNumeroTransacciones();
+                    if(numTranx > customerPassiveProductResponse.getMaxMovementFree()){
+                        e.setCommission(customerPassiveProductResponse.getCommission());
+                        update.setAmount(update.getAmount() - e.getCommission());
+                    }
                     if (e.getOperationType().equals(OperationType.WITHDRAWAL)) {
                         update.setAmount(customerPassiveProductResponse.getAmount() - e.getAmount());
                     }
                     if (e.getOperationType().equals(OperationType.DEPOSIT)) {
                         update.setAmount(customerPassiveProductResponse.getAmount() + e.getAmount());
-                    }
-                    // Contar el numero de transacciones en el mes
-                    Integer numTranx = 0; // GetNumeroTransacciones();
-                    if(numTranx > customerPassiveProductResponse.getMaxMovementFree()){
-                        update.setAmount(update.getAmount() - customerPassiveProductResponse.getCommission());
                     }
                     // Actualizar saldo
                     return customerProductRepository.update(update, e.getCustomerPassiveProductId())
@@ -84,11 +88,13 @@ public class OperationService implements IOperationService {
 
     @Override
     public Mono<OperationResponse> update(Mono<OperationRequest> request, String id) {
+        log.debug("====> OperationService: Update");
         return Mono.just(new OperationResponse());
     }
 
     @Override
     public Mono<OperationResponse> delete(String id) {
+        log.debug("====> OperationService: Delete");
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(RuntimeException::new))
                 .flatMap(deleteCustomer -> repository.delete(deleteCustomer)
@@ -96,9 +102,14 @@ public class OperationService implements IOperationService {
     }
 
     public String getDate() {
+        log.debug("====> OperationService: getDate");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
     }
-
+    public OperationRequest printDebug(OperationRequest request){
+        log.debug("====> OperationService: printDebug");
+        log.debug("====> OperationService: Request ==> " + request.toString());
+        return request;
+    }
 }

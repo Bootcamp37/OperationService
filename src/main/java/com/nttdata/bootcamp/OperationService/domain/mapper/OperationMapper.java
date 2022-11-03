@@ -5,6 +5,7 @@ import com.nttdata.bootcamp.OperationService.domain.dto.OperationResponse;
 import com.nttdata.bootcamp.OperationService.domain.entity.Operation;
 import com.nttdata.bootcamp.OperationService.infraestructure.IOperationMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,22 +13,17 @@ import org.springframework.stereotype.Component;
 public class OperationMapper implements IOperationMapper {
     @Override
     public Operation toEntity(OperationRequest request) {
+        log.debug("====> OperationMapper: ToEntity");
         Operation operation = new Operation();
-        operation.setCustomerPassiveProductId(request.getCustomerPassiveProductId());
-        operation.setOperationType(request.getOperationType());
-        operation.setAmount(request.getAmount());
-        operation.setOperationDate(request.getOperationDate());
+        BeanUtils.copyProperties(request,operation);
         return operation;
     }
 
     @Override
     public OperationResponse toResponse(Operation operation) {
+        log.debug("====> OperationMapper: ToResponse");
         OperationResponse operationResponse = new OperationResponse();
-        operationResponse.setId(operation.getId());
-        operationResponse.setCustomerPassiveProductId(operation.getCustomerPassiveProductId());
-        operationResponse.setOperationType(operation.getOperationType());
-        operationResponse.setAmount(operation.getAmount());
-        operationResponse.setOperationDate(operation.getOperationDate());
+        BeanUtils.copyProperties(operation,operationResponse);
         return operationResponse;
     }
 }

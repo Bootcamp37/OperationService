@@ -17,4 +17,5 @@ public class Operation {
     private OperationType operationType;
     private Double amount;
     private String operationDate;
+    private Double commission = 0.0;
 }

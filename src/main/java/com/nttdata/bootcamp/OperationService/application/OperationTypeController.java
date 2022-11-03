@@ -19,6 +19,7 @@ public class OperationTypeController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Flux<OperationType> getAll() {
+        log.debug("====> OperationTypeController: GetAll");
         return Flux.fromArray(OperationType.values());
     }
 }
