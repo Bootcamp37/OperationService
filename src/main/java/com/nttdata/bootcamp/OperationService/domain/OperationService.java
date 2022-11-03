@@ -63,6 +63,11 @@ public class OperationService implements IOperationService {
                     if (e.getOperationType().equals(OperationType.DEPOSIT)) {
                         update.setAmount(customerPassiveProductResponse.getAmount() + e.getAmount());
                     }
+                    // Contar el numero de transacciones en el mes
+                    Integer numTranx = 0; // GetNumeroTransacciones();
+                    if(numTranx > customerPassiveProductResponse.getMaxMovementFree()){
+                        update.setAmount(update.getAmount() - customerPassiveProductResponse.getCommission());
+                    }
                     // Actualizar saldo
                     return customerProductRepository.update(update, e.getCustomerPassiveProductId())
                             // Guardar operacion

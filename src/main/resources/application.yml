@@ -1,16 +1,14 @@
+server:
+  port: 8083
 spring:
+  application:
+    name: operation-service
   config:
     import:
       - optional:configserver:http://ms-configserver:8888
-  application:
-    name: operation-service
   data:
     mongodb:
-      database: db_operation
-      host: localhost
-      port: 27020
-server:
-  port: 8083
+      uri: mongodb://db_operation:27017/db_operation
 management:
   endpoint:
     web:
@@ -19,3 +17,19 @@ management:
 message:
   path-operation: /api/v1/operations
   path-operationType: /api/v1/operationTypes
+  path-customerProductDomain: http://ms-customerproduct:8082
+  path-get: /api/v1/customerPassivesProducts/
+  path-update: /api/v1/customerPassivesProducts/update/
+resilience4j:
+  circuitbreaker:
+    instances:
+      ms-customerProduct:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        failure-rate-threshold: 50
+        minimumNumberOfCalls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        waitDurationInOpenState: 2s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
