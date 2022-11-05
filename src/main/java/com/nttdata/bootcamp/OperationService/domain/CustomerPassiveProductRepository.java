@@ -26,11 +26,12 @@ public class CustomerPassiveProductRepository {
     public String pathUpdate;
     @Autowired
     ReactiveCircuitBreakerFactory reactiveCircuitBreakerFactory;
+
     public Mono<CustomerPassiveProductResponse> getById(String idCustomerPassiveProduct) {
         log.debug("====> CustomerPassiveProductRepository: GetById");
         WebClient webClientProduct = WebClient.builder().baseUrl(urlCustomerProduct).build();
         return webClientProduct.get()
-                .uri(pathGet+"{id}", idCustomerPassiveProduct)
+                .uri(pathGet + "{id}", idCustomerPassiveProduct)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new Exception("Error 400")))
@@ -45,7 +46,7 @@ public class CustomerPassiveProductRepository {
         log.debug("====> CustomerPassiveProductRepository: Update");
         WebClient webClientProduct = WebClient.builder().baseUrl(urlCustomerProduct).build();
         return webClientProduct.put()
-                .uri(pathUpdate+"{id}", id)
+                .uri(pathUpdate + "{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()

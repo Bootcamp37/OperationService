@@ -16,8 +16,8 @@ public class CustomerPassiveProductResponse {
     private Double maintenance;
     private Integer movementLimit;
     private Integer movementDay;
-    private Integer movementMonth;
     private Double amount;
     private int maxMovementFree;
     private Double commission;
+    private Double minAmount;
 }

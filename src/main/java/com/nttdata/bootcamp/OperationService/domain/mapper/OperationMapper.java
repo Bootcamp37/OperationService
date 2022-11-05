@@ -15,7 +15,7 @@ public class OperationMapper implements IOperationMapper {
     public Operation toEntity(OperationRequest request) {
         log.debug("====> OperationMapper: ToEntity");
         Operation operation = new Operation();
-        BeanUtils.copyProperties(request,operation);
+        BeanUtils.copyProperties(request, operation);
         return operation;
     }
 
@@ -23,7 +23,7 @@ public class OperationMapper implements IOperationMapper {
     public OperationResponse toResponse(Operation operation) {
         log.debug("====> OperationMapper: ToResponse");
         OperationResponse operationResponse = new OperationResponse();
-        BeanUtils.copyProperties(operation,operationResponse);
+        BeanUtils.copyProperties(operation, operationResponse);
         return operationResponse;
     }
 }
