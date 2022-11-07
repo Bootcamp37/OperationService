@@ -5,10 +5,14 @@ spring:
     name: operation-service
   config:
     import:
-      - optional:configserver:http://ms-configserver:8888
+      - optional:configserver:https://ms-config.azurewebsites.net
   data:
     mongodb:
-      uri: mongodb://db_operation:27017/db_operation
+      uri: mongodb+srv://admin:5K8yj70q4RpuiBSE@bootcamp37.anglhbu.mongodb.net/db_operation
+eureka:
+  client:
+    service-url:
+      defaultZone: https://ms-discovery.azurewebsites.net/eureka/
 management:
   endpoint:
     web:
@@ -17,7 +21,7 @@ management:
 message:
   path-operation: /api/v1/operations
   path-operationType: /api/v1/operationTypes
-  path-customerProductDomain: http://ms-customerproduct:8082
+  path-customerProductDomain: https://ms-customerproduct.azurewebsites.net
   path-get: /api/v1/customerPassivesProducts/
   path-update: /api/v1/customerPassivesProducts/update/
 resilience4j:
